@@ -28,7 +28,6 @@ class Notepy (QMainWindow):
 
         #======================file_menu===============
 
-
         file_menu =QMenu('File',self)
         menu_bar.addMenu(file_menu)
 
@@ -36,23 +35,31 @@ class Notepy (QMainWindow):
         open_action.triggered.connect(self.file_open)
         file_menu.addAction(open_action)
 
+        save_action = QAction('Save', self)
+        save_action.triggered.connect(self.file_save)
+        file_menu.addAction(save_action)
+
         save_as_pdf_action = QAction('Save As PDF', self)
         save_as_pdf_action.triggered.connect(self.save_as_pdf)
         file_menu.addAction(save_as_pdf_action)
 
-        edit_menu =QMenu('Edit',self)
+        rename_action = QAction('Rename', self)
+        rename_action.triggered.connect(self.file_saveas)
+        file_menu.addAction(rename_action)
+
+        edit_menu = QMenu('Edit', self)
         menu_bar.addMenu(edit_menu)
 
-        view_menu =QMenu('View',self)
+        view_menu = QMenu('View', self)
         menu_bar.addMenu(view_menu)
 
-        insert_menu =QMenu('Insert',self)
+        insert_menu = QMenu('Insert', self)
         menu_bar.addMenu(insert_menu)
 
-        format_menu =QMenu('Format',self)
+        format_menu = QMenu('Format', self)
         menu_bar.addMenu(format_menu)
 
-        tools_menu =QMenu('Tools',self)
+        tools_menu = QMenu('Tools', self)
         menu_bar.addMenu(tools_menu)
 
 
@@ -95,7 +102,12 @@ class Notepy (QMainWindow):
 
         self.addToolBar(tool_bar)
 
+
+         # =================  funcitons  =============
+
+
     def set_font_size(self):
+
         value = self.font_size_box.value()
         self.editor.setFontPointSize(value)
 
@@ -109,6 +121,37 @@ class Notepy (QMainWindow):
             self.editor.setText(text)
             self.update_title()
 
+    def file_save(self):
+        print(self.path)
+        if self.path == '':
+
+            self.file_saveas()
+        text = self.editor.toPlainText()
+
+        try:
+            with open(self.path, 'w') as f:
+                f.write(text)
+                self.update_title()
+        except Exception as e:
+            print(e)
+
+    def file_saveas(self):
+        self.path, _ = QFileDialog.getSaveFileName(self, "Save file", "",
+                                                   "text documents (*.text);Text documents (*.txt);All files (*.*)")
+
+        if self.path == ' ':
+            return
+        text = self.editor.toPlainText()
+
+        try:
+            with open(path,'w') as f:
+                f.write(text)
+                self.update_title()
+        except Exception as e:
+                print(e)
+
+    def update_title(self):
+        self.setWindowTitle(self.title + ' ' + self.path)
 
     def save_as_pdf(self):
         file_path, _ = QFileDialog.getSaveFileName(self, 'Save PDF', 'Notepy', 'PDF File (*.pdf)')
