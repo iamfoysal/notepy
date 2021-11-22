@@ -136,8 +136,7 @@ class Notepy (QMainWindow):
             print(e)
 
     def file_saveas(self):
-        self.path, _ = QFileDialog.getSaveFileName(self, "Save file", "",
-                                                   "text documents (*.text);Text documents (*.txt);All files (*.*)")
+        self.path, _ = QFileDialog.getSaveFileName(self, "Save file", "", "text documents (*.text);Text documents (*.txt);All files (*.*)")
 
         if self.path == ' ':
             return
